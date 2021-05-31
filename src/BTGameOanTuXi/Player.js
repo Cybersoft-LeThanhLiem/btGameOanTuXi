@@ -1,33 +1,40 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export default class Player extends Component {
+class Player extends Component {
     render() {
         return (
             <div className="player">
                 <div className="option">
-                    <img src="./img/keo.png" alt="" />
+                    <img src={this.props.mangDatCuoc.find(item => item.datCuoc).hinhAnh} alt={this.props.mangDatCuoc.find(item => item.datCuoc).ma} />
                 </div>
                 <div className="speech-bubble"></div>
                 <img style={{ width: 200, height: 200 }} src="./img/player.png" alt="player" />
 
                 <div className="row">
-                    <div className="col-4">
-                        <button className="btnOption">
-                            <img src="./img/bao.png" alt="bao" />
-                        </button>
-                    </div>
-                    <div className="col-4">
-                        <button className="btnOption">
-                            <img src="./img/bua.png" alt="bua" />
-                        </button>
-                    </div>
-                    <div className="col-4">
-                        <button className="btnOption">
-                            <img src="./img/keo.png" alt="keo" />
-                        </button>
-                    </div>
+                    {
+                        this.props.mangDatCuoc.map((item, index) => {
+                            let border = {};
+                            if (item.datCuoc) {
+                                border = { border: '3px solid orange' };
+                            }
+                            return <div className="col-4" key={index}>
+                                <button style={border} className="btnOption">
+                                    <img src={item.hinhAnh} alt={item.ma} />
+                                </button>
+                            </div>
+                        })
+                    }
                 </div>
             </div>
         )
     }
 }
+
+const mapStateToProps = rootReducer => {
+    return {
+        mangDatCuoc: rootReducer.BTGameOanTuXiReducer.mangDatCuoc
+    }
+}
+
+export default connect(mapStateToProps)(Player)
